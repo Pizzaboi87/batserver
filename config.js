@@ -5,7 +5,7 @@ const config = {
         password: process.env.API_PASSWORD,
         database: process.env.API_DATABASE
     },
-    listPerPage: 12,
+    listPerPage: 200,
 };
 
 module.exports = config;

@@ -1,9 +1,11 @@
 const express = require("express");
+const helmet = require("helmet");
 const app = express();
 const port = 3000;
 const batMovies = require("./routes/batServerMovies");
 const comicVine = require("./routes/comicVine");
 
+app.use(helmet());
 app.use(express.json());
 
 app.use(
