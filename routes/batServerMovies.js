@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const batServer = require('../services/batServer');
+const batServer = require('../services/batServerMovies');
 
 router.get('/', async function(req, res, next) {
     try {
