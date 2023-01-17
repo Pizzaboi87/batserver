@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const port = 3000;
 const batMovies = require("./routes/batServerMovies");
+const batGames = require("./routes/batServerGames");
 const comicVine = require("./routes/comicVine");
 
 app.use(express.json());
@@ -17,6 +18,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/movies", batMovies);
+app.use("/games", batGames);
 app.use("/comicvine", comicVine);
 
 app.use((err, req, res, next) => {
