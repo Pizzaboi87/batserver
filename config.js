@@ -48,7 +48,7 @@ const buildSSL = () => {
 
   if (isProd) {
     throw new Error(
-      "Missing Aiven CA in production. Provide AIVEN_CA_CERT_PATH or AIVEN_CA_CERT."
+      "Missing Aiven CA in production. Provide AIVEN_CA_CERT or AIVEN_CA_CERT_PATH."
     );
   }
   return undefined;
@@ -76,9 +76,6 @@ const config = {
     ssl: buildSSL(),
   },
   listPerPage: toInt(process.env.LIST_PER_PAGE, 200),
-  server: {
-    port: toInt(process.env.PORT, 3000),
-  },
 };
 
 module.exports = config;

@@ -1,25 +1,17 @@
 const express = require("express");
 const router = express.Router();
-const games = require("../services/batServerGames");
+const cors = require("cors");
+const batServer = require("../services/batServerGames");
 
-router.get("/", async (req, res) => {
+router.use(cors());
+
+router.get("/", async (req, res, next) => {
   try {
-    const page = req.query.page;
-    const data = await games.getGames(page);
-    return res.json(Array.isArray(data) ? data : []);
+    const result = await batServer.getGames(req.query.page);
+    return res.json(result);
   } catch (err) {
-    console.error("Error while getting games", {
-      name: err?.name,
-      message: err?.message,
-      code: err?.code,
-      errno: err?.errno,
-      sqlState: err?.sqlState,
-      stack: err?.stack,
-    });
-    return res.status(500).json({
-      error: "Failed to fetch games",
-      reason: err?.message || "unknown",
-    });
+    console.log("Error while getting batServer data", err.message);
+    return next(err);
   }
 });
 

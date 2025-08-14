@@ -1,36 +1,22 @@
 const db = require("./db");
+const helper = require("../helper");
+const config = require("../config");
 
-const getMovies = async (page = 1, perPage = 200) => {
-  const currentPage = Math.max(
-    1,
-    Number.isFinite(+page) ? parseInt(page, 10) : 1
-  );
-  const limit = Math.max(
-    1,
-    Number.isFinite(+perPage) ? parseInt(perPage, 10) : 200
-  );
-  const offset = (currentPage - 1) * limit;
+const getMovies = async (page = 1) => {
+  const offset = helper.getOffset(page, config.listPerPage);
 
   const sql = `
-    SELECT
-      id,
-      title,
-      shown AS year,
-      runtime,
-      director,
-      actors,
-      plot,
-      poster AS poster_url,
-      imdbRating AS imdb_rating,
-      imdbID AS imdb_id,
-      filmType AS film_type
+    SELECT 
+      title, shown, runtime, director, actors, plot, poster, imdbRating, imdbID, filmType
     FROM batMovie
-    ORDER BY CAST(shown AS UNSIGNED) DESC, id DESC
     LIMIT ?, ?
   `;
 
-  const rows = await db.query(sql, [offset, limit]);
-  return rows;
+  const rows = await db.query(sql, [offset, config.listPerPage]);
+  const data = helper.emptyOrRows(rows);
+  const meta = { page: Math.max(1, parseInt(page, 10) || 1) };
+
+  return { data, meta };
 };
 
 module.exports = { getMovies };
