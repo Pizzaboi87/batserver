@@ -1,20 +1,20 @@
 const express = require('express');
-const mysql = require('mysql2/promise');
 const router = express.Router();
-const cors = require('cors')
+const cors = require('cors');
 const batServer = require('../services/batServerGames');
 
-router.use(cors())
+router.use(cors());
 
-router.get('/', async function(req, res, next) {
-    try {
-        res.json(await batServer.getGames(req.query.page));
-    } catch (err) {
-        console.log(`Error while getting batServer data `, err.message);
-        next(err);
-    } finally {
-        mysql.end();
-    }
+router.get('/', async (req, res, next) => {
+  try {
+    const page = req.query.page;
+    const data = await batServer.getGames(page);
+    res.json(data);
+  } catch (err) {
+    console.log('Error while getting games', err);
+    res.status(500).json({ error: 'Failed to fetch games' });
+    next(err);
+  }
 });
 
 module.exports = router;
